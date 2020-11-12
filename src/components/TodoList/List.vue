@@ -55,12 +55,55 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="cancel">
+                        Cancel
+                    </v-btn>
                     <v-btn color="blue darken-1" text @click="save">
                         Save
                     </v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-dialog v-model="editing" persistent max-width="600px">
+            <v-card>
+                <v-card-title>
+                    <span class="headline">Form To Do</span>
+                </v-card-title>
+                <v-card-text>
+                    <v-container>
+                        <v-text-field
+                        v-model="formTodo.task"
+                        label="Task"
+                        required>
+                            
+                        </v-text-field>
+                        <v-select 
+                        v-model="formTodo.priority" :items ="['Penting','Biasa','Tidak Penting']"
+                        label="Priority"
+                        required>
+
+                        </v-select>
+                        <v-textarea
+                        v-model="formTodo.note"
+                        label="Note"
+                        required> 
+
+                        </v-textarea>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="cancel">
+                        Cancel
+                    </v-btn>
+                    <v-btn color="blue darken-1" text @click="editing = false">
+                        Edit
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        
+        
     </v-main>
 </template>
 <script>
@@ -70,6 +113,8 @@
             return{
                 search:null,
                 dialog:false,
+                editing:false,
+                test: null,
                 headers:[
                     {
                         text:"Task",
@@ -122,6 +167,20 @@
                     note:null,
                 };
             },
+            edit(){
+                const test = this.index;
+                this.todos.splice(test,1);
+                this.todos.splice(test,0,this.formTodo);
+            },
+            editItem(item){
+                this.index = this.todos.indexOf[item];
+                this.editing=true;
+                this.edit();
+            },
+            deleteItem(item){
+                const index = this.todos.indexOf(item);
+                this.todos.splice(index,1);
+            }
         },
     };
 </script>
