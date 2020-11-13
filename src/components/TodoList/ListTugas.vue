@@ -15,7 +15,7 @@
                         Tambah
                     </v-btn>
                 </v-card-title>
-                <v-data-table :headers ="headers" :items="todos" :search="search">
+                <v-data-table :headers ="headers" :items="todos" :search="search" >
                     <template v-slot:[`item.priority`]="{item}">
 
                             <v-chip
@@ -50,11 +50,15 @@
                              mdi-file-outline
 
                         </v-icon>
-                        
+                    </template>
+                    <template v-slot:[`item.checkbox`]="{item}" >
+                        <v-checkbox v-model="arrayHapusSemua" :value="item">    
+
+                        </v-checkbox>
                     </template>
                 </v-data-table>
             </v-card>
-            <div v-show="detail" class="ml-3" style="background-color:gray; height: 200px ; color:white" >
+            <div v-show="index!=null" class="ml-3" style="background-color:gray; height: 200px ; color:white" >
             <p >{{nama}}</p>
                 <v-chip
                     class="ma-2"
@@ -91,11 +95,23 @@
 
                 mdi-delete
 
-            </v-icon>
-            
-            
+            </v-icon>   
+            </div>
         </div>
-        </div>
+
+        <v-card persistent max-width="600px" v-show="arrayHapusSemua.length">
+            <v-btn
+            depressed
+            color="error"
+            @click="deleteAll"
+            >
+            Hapus Semua
+            </v-btn>
+            <ul v-for="item in arrayHapusSemua" :key="item">
+            <li>{{item.task}}</li>
+        </ul>
+        </v-card>
+
         <v-dialog v-model="hapus" persistent max-width="600px">
             <v-card>
                 <v-card-title class="headline">
@@ -211,6 +227,7 @@
         name:"List",
         data(){
             return{
+                arrayHapusSemua:[],
                 search:null,
                 dialog:false,
                 editing:false,
@@ -230,7 +247,7 @@
                     },
                     {text:"Priority", value:"priority"},
                     {text :"Actions", value:"actions"},
-                    
+                    {text:" ", value:"checkbox"},
                 ],
                 todos: [
                     {
@@ -254,6 +271,13 @@
                     priority:null,
                     note:null,
                 },
+                hapusSemua:[
+                    {
+                        task:null,
+                        priority:null,
+                        note:null,
+                    }
+                ]
             };
         },
         methods:{
@@ -305,6 +329,21 @@
                 this.nama=null;
                 this.prioritas=null;
                 this.catatan=null;
+            },
+            deleteAll(){
+                this.arrayHapusSemua.forEach(element => {
+                    if(this.nama==element.task)
+                    {
+                        this.index=null;
+                    }
+                });
+                this.arrayHapusSemua.forEach(element => {
+                    const tes = this.todos.indexOf(element);
+                    this.todos.splice(tes,1);
+                   
+                    
+                });
+                this.arrayHapusSemua=[];
             },
             showItem(item){
                 this.detail=true;
