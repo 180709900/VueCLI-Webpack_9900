@@ -1,6 +1,6 @@
 <template>
     <v-main class="list">
-        <h3 class="text-h3 font-weight-medium mb-5">To Do List UGD</h3>
+        <h3 class="text-h3 font-weight-medium mb-5">To Do List Tugas</h3>
         <div class="d-flex flex-row mb-6">
              <v-card width="500px">
                 <v-card-title>
